@@ -26,3 +26,4 @@ apk/assets/web/vendor/
 *.aab
 apk/libs/
 apk/jniLibs/
+**/verification/
