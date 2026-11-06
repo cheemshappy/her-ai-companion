@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">她</string>
+    <string name="accessibility_label">她（操作手机）</string>
+    <string name="accessibility_desc">允许她读取屏幕内容并执行点击、滑动、输入，用来帮你操作手机。</string>
+    <string name="notification_label">她（读通知）</string>
+</resources>

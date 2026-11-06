@@ -1,0 +1,16 @@
+plugins { id 'com.android.application' }
+android {
+ namespace 'com.dafeiyu.amadeus'
+ compileSdk 34
+ defaultConfig { applicationId 'com.dafeiyu.amadeus'; minSdk 26; targetSdk 34; versionCode 109; versionName '0.9.88' }
+ sourceSets { main { manifest.srcFile 'AndroidManifest.xml'; java.srcDirs=['src']; res.srcDirs=['res']; aidl.srcDirs=['aidl']; assets.srcDirs=['assets']; jniLibs.srcDirs=['jniLibs'] } }
+ buildFeatures { aidl true }
+ compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}
+dependencies {
+ implementation 'dev.rikka.shizuku:api:13.1.5'
+ implementation 'dev.rikka.shizuku:provider:13.1.5'
+ implementation 'dev.rikka.shizuku:aidl:13.1.5'
+ implementation 'com.alphacephei:vosk-android:0.3.47@aar'
+ implementation 'net.java.dev.jna:jna:5.13.0@aar'
+}

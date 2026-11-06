@@ -1,0 +1,2 @@
+.speech-retry{position:fixed;z-index:40;left:18px;right:18px;bottom:calc(env(safe-area-inset-bottom) + 78px);margin:auto;width:max-content;max-width:calc(100vw - 36px);padding:10px 14px;border:1px solid #759e9b;border-radius:14px;background:#173640;color:#e4eee7;font-size:12px;box-shadow:0 4px 20px #0015}
+.speech-retry[hidden]{display:none}body.float .speech-retry{left:5px;right:5px;bottom:40px;max-width:calc(100vw - 10px);font-size:10px;padding:8px}

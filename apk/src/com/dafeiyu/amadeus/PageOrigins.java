@@ -1,0 +1,2 @@
+package com.dafeiyu.amadeus;
+final class PageOrigins {static boolean same(String candidate,String paired){try{java.net.URI a=new java.net.URI(candidate),b=new java.net.URI(paired);if(a.getUserInfo()!=null||b.getUserInfo()!=null||a.getHost()==null||b.getHost()==null||!a.getScheme().matches("https?"))return false;int x=a.getPort()<0?(a.getScheme().equals("https")?443:80):a.getPort(),y=b.getPort()<0?(b.getScheme().equals("https")?443:80):b.getPort();return a.getScheme().equals(b.getScheme())&&a.getHost().equalsIgnoreCase(b.getHost())&&x==y;}catch(Exception e){return false;}}}

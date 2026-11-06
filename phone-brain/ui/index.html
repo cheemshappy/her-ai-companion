@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>她</title>
+<link rel="icon" type="image/svg+xml" href="/app-icon.svg" />
+<link rel="stylesheet" href="/style.css?v=20261030-assistant" />
+<link rel="stylesheet" href="/hub.css?v=20261031-memory-history-voice" />
+<link rel="stylesheet" href="/space.css?v=20261031-space" />
+<link rel="stylesheet" href="/speech.css?v=20261031-continuity2" />
+  <link rel="stylesheet" href="/chat-history.css?v=20261031-memory-history-voice" />
+</head>
+<body>
+  <nav id="tabs" aria-label="主导航">
+    <button data-page="chat" class="on" aria-current="page">陪伴</button>
+    <button data-page="inbox">今日事项 <span class="tab-spark" aria-hidden="true"></span></button>
+    <button id="btnMenu" data-page="space">我的空间 <span id="statusDot" class="dot off" aria-hidden="true"></span></button>
+  </nav>
+
+  <main id="spacePage" hidden aria-labelledby="spaceTitle">
+    <header class="space-heading"><img src="/app-icon.svg" alt=""/><div><span class="eyebrow">我的空间</span><h1 id="spaceTitle">她<span>把日常，轻轻接住</span></h1></div></header>
+    <p class="space-intro">把陪伴调成你喜欢的样子。</p>
+    <div class="space-connections" aria-label="连接状态"><div><span>电脑大脑</span><strong id="spaceBrain">正在连接</strong></div><div><span>手机控制</span><strong id="spaceControl">正在检查</strong></div><div><span>通知接收</span><strong id="spaceNotifications">正在检查</strong></div></div>
+    <p id="spaceFeedback" class="space-feedback" role="status"></p>
+    <div class="space-grid">
+      <section class="space-section" aria-labelledby="spaceCompanion"><h2 id="spaceCompanion">陪伴方式</h2>
+        <button class="space-row" data-space="float"><span><strong>悬浮陪伴</strong><small>用其他应用时，也能看见她</small></span><span class="space-value" id="spaceFloat"></span></button>
+        <button class="space-row" data-space="cont" aria-pressed="false"><span><strong>连续对话</strong><small>她说完后，接着听你说</small></span><span class="space-toggle" id="spaceCont" aria-hidden="true"></span></button>
+        <button class="space-row" data-space="hear" aria-pressed="false"><span><strong>听手机里的声音</strong><small>让她了解视频里正在说什么</small></span><span class="space-toggle" id="spaceHear" aria-hidden="true"></span></button>
+        <button class="space-row" data-space="keep" aria-pressed="false"><span><strong>后台陪伴</strong><small>开机后回来，意外退出后提醒恢复</small></span><span class="space-toggle" id="spaceKeep" aria-hidden="true"></span></button>
+      </section>
+      <section class="space-section" aria-labelledby="spacePersonal"><h2 id="spacePersonal">声音与模样</h2>
+        <div class="space-row"><span><strong>她的声音</strong><small>当前对话音色</small></span><span class="space-value" id="spaceVoice"></span></div>
+        <button class="space-row" data-space="appearance"><span><strong>心情与表情</strong><small>表情、外观与可爱的小动作</small></span><span class="space-chevron" aria-hidden="true">›</span></button>
+        <button class="space-row" data-space="wake"><span><strong>唤醒词</strong><small>灵敏度和最近听到的声音</small></span><span class="space-chevron" aria-hidden="true">›</span></button>
+        <button class="space-row" data-space="history"><span><strong>对话记录</strong><small>翻翻刚才聊过的话</small></span><span class="space-chevron" aria-hidden="true">›</span></button>
+        <div class="space-row"><span><strong>与QQ的记忆</strong><small id="spaceMemoryHint">正在检查同步</small></span><span class="space-value" id="spaceMemory"></span></div>
+      </section>
+      <section class="space-section" aria-labelledby="spaceConnection"><h2 id="spaceConnection">连接与权限</h2>
+        <div class="space-row"><span><strong>完整委托已开启</strong><small>你交代的操作直接执行，QQ和微信回复直接发送</small></span><span class="space-value">不重复确认</span></div>
+        <button class="space-row" data-space="srv"><span><strong>电脑连接</strong><small id="spaceConnectionHint">管理她与电脑的连接</small></span><span class="space-chevron" aria-hidden="true">›</span></button>
+        <button class="space-row" data-space="acc"><span><strong>手机操作权限</strong><small>允许她读屏、点击和输入</small></span><span class="space-value" id="spaceAcc"></span></button>
+        <button class="space-row" data-space="noti"><span><strong>通知读取权限</strong><small>接收系统实际公开的消息通知</small></span><span class="space-value" id="spaceNoti"></span></button>
+        <button class="space-row" data-space="inbox"><span><strong>消息与待办</strong><small>去今日事项查看摘要和原消息</small></span><span class="space-chevron" aria-hidden="true">›</span></button>
+      </section>
+      <section class="space-section space-about" aria-labelledby="spaceAbout"><h2 id="spaceAbout">关于陪伴</h2><p>DeepSeek-chan<br/>原画／拆分：神宫凉子<br/>Live2D：霓虹猫_NeonNeko</p><p>免费配布模型，仅供本机个人使用。请保留作者署名，勿转发含模型的安装包。</p><button class="space-reset" data-space="reset">清空当前对话</button></section>
+    </div>
+  </main>
+
+  <div id="inboxPage" hidden>
+    <div class="hub-heading"><div><span id="hubDate" class="eyebrow"></span><h1>重要的事，<br/>都在眼前。</h1></div><button id="hubRefresh" class="quiet-button" aria-label="重新整理消息">↻ 整理</button></div>
+    <div id="inboxNotice" class="source-status" role="status">正在连接消息来源…</div>
+    <div class="hub-metrics"><div><strong id="hubPendingCount">0</strong><span>件待处理</span></div><div><strong id="hubUrgentCount">0</strong><span>件优先处理</span></div><div><strong id="hubMessageCount">0</strong><span>条已收消息</span></div></div>
+    <section id="mediaCard" class="media-card" hidden aria-label="当前视频"><span class="media-symbol" aria-hidden="true">▶</span><div><strong id="mediaTitle"></strong><small id="mediaStatus"></small></div><button data-media-action="pause">暂停</button><button data-media-action="fullscreen">全屏</button></section>
+    <div class="hub-section-title"><h2>她替你理了理</h2><span id="hubStatus">新消息会自动整理</span></div>
+    <nav class="hub-filters" aria-label="事项筛选"><button data-hub-filter="pending" class="on" aria-pressed="true">待处理</button><button data-hub-filter="snoozed" aria-pressed="false">稍后</button><button data-hub-filter="done" aria-pressed="false">已完成</button><button data-hub-filter="messages" aria-pressed="false">全部消息</button></nav>
+    <p id="hubFeedback" class="hub-feedback" role="status"></p>
+    <div id="hubEvents" class="hub-events"></div><div id="hubConversations" hidden></div>
+    <form id="hubAdd" class="quick-task"><label class="sr-only" for="hubNewTask">新增待办</label><input id="hubNewTask" placeholder="还有什么要记下来？" maxlength="500"/><button aria-label="添加待办">＋</button></form>
+    <p class="hub-footnote">摘要供你快速判断，重要事项可随时查看原消息。图片与语音未解析时会明确标注。</p>
+    <div id="inboxList" hidden></div>
+  </div>
+  <dialog id="hubDetail" class="hub-dialog" aria-labelledby="hubDetailTitle"><header><div><span class="eyebrow">消息原文</span><h2 id="hubDetailTitle"></h2></div><button id="hubDetailClose" aria-label="关闭消息详情">×</button></header><div id="hubDetailContent" tabindex="0" role="region" aria-label="消息正文"></div><footer><button id="hubLoadMore">更早的消息</button><button id="hubReply">帮我回复并发送</button></footer></dialog>
+
+  <!-- 动态壁纸（2026-10-22）：按时间+天气换场景，canvas 现场画 -->
+  <canvas id="bgCanvas"></canvas>
+
+  <div id="stage">
+    <img id="avatarImg" alt="" hidden />
+    <canvas id="avatarCanvas" width="720" height="960"></canvas>
+    <div id="bubbleWrap"><div id="bubble"></div></div>
+  </div>
+
+  <div id="a11yBar" hidden>
+    <span>⚠️ 无障碍没开，我看不见屏幕也动不了手</span>
+    <button id="a11yFix">去开启</button>
+  </div>
+
+  <div id="log" hidden></div>
+
+  <div id="bar">
+    <button id="btnLog" class="ghost" title="对话记录" aria-label="对话记录"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v11H9l-4 4V5Z M9 9h6M9 12h4"/></svg></button>
+    <input id="input" type="text" placeholder="跟她说话…" enterkeyhint="send" autocomplete="off" />
+    <button id="btnMic" class="round" title="按住说话" aria-label="语音输入"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M9 22h6"/></svg></button>
+    <button id="btnSend" class="round primary" title="发送" aria-label="发送"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 11 6-6 6 6M12 5v15"/></svg></button>
+  </div>
+
+  <div id="overlay" hidden>
+    <div id="overlayBox"></div>
+  </div>
+
+  <script src="/startup.js?v=20261106-fast-open"></script>
+  <script src="/calendar.js?v=20261031-memory-history-voice"></script>
+  <script src="/chat-state.js?v=20261031-memory-history-voice"></script>
+  <script src="/assistant-intent.js?v=20261101-motion-search"></script>
+  <script src="/connection.js?v=20261102-remote-recovery"></script>
+  <script src="/action-policy.js?v=20261101-motion-search"></script>
+  <script src="/speech-text.js?v=20261031-continuity2"></script>
+  <script src="/speech-queue.js?v=20261031-continuity2"></script>
+  <script src="/audio-stream.js?v=20261031-continuity2"></script>
+  <script src="/character-state.js?v=20261101-motion-search"></script>
+  <script src="/character.js?v=20261101-motion-search"></script>
+  <script src="/performance.js?v=20261101-motion-search"></script>
+  <script src="/contact.js?v=20261031-memory-history-voice"></script>
+  <script src="/live2d.js?v=20261101-motion-search"></script>
+  <script src="/message-hub.js?v=20261102-stale-messages"></script>
+  <script src="/bg.js?v=20261030-assistant"></script>
+  <script src="/chat-history.js?v=20261031-memory-history-voice"></script>
+  <script src="/app.js?v=20261102-multi-route"></script>
+  <script src="/mood-lamp.js?v=20261031-space"></script>
+</body>
+</html>

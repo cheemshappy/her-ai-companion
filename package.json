@@ -1,0 +1,17 @@
+{
+  "name": "her-ai-companion",
+  "version": "0.9.88",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "start": "node phone-brain/server.mjs",
+    "test": "node scripts/test.mjs",
+    "assets": "node scripts/prepare-assets.mjs",
+    "pair": "node scripts/pair.mjs"
+  }
+}

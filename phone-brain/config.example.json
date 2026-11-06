@@ -1,0 +1,57 @@
+{
+  "port": 8790,
+  "bind": "127.0.0.1",
+  "apiBase": "https://api.deepseek.com",
+  "model": "deepseek-chat",
+  "fastModel": "deepseek-chat",
+  "personaFile": "persona.md",
+  "voice": {
+    "mode": "off",
+    "engine": "original",
+    "reference": {},
+    "originalChinese": {}
+  },
+  "fastTts": {
+    "enabled": false
+  },
+  "memorySync": {
+    "enabled": false,
+    "readRecent": 12
+  },
+  "adb": {
+    "enabled": false,
+    "path": "adb",
+    "port": 8790,
+    "everySec": 20
+  },
+  "tunnel": {
+    "enabled": false,
+    "phoneFallback": false,
+    "autoNotify": false,
+    "notifyUid": 0
+  },
+  "weather": {
+    "enabled": false
+  },
+  "evening": {
+    "enabled": false
+  },
+  "briefing": {
+    "enabled": false
+  },
+  "character": {
+    "ai": false
+  },
+  "hearing": {
+    "enabled": false
+  },
+  "biliNudge": {
+    "enabled": false
+  },
+  "biliForward": {
+    "enabled": false
+  },
+  "qqNotify": {
+    "enabled": false
+  }
+}

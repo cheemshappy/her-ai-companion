@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>她（浮窗）</title>
+<link rel="stylesheet" href="/speech.css?v=20261031-continuity2" />
+<style>
+  /* 浮窗要**完全透明**：只留人，不留底 */
+  html, body { margin: 0; padding: 0; height: 100%; background: transparent; overflow: hidden;
+    -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+  #stage { position: relative; width: 100%; height: 100%; }
+  #avatarCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  #bubble {
+    position: absolute; left: 4px; right: 4px; bottom: 54px;
+    padding: 7px 10px; border-radius: 12px;
+    background: rgba(9, 15, 26, .93); z-index: 6;
+    border: 1px solid rgba(120, 190, 255, .28);
+    color: #eaf2ff; font-size: 12px; line-height: 1.45;
+    max-height: 62%; overflow: hidden;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity .25s, transform .25s;
+    pointer-events: none;
+    display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical;
+  }
+  #bubble.show { opacity: 1; transform: none; }
+  /* ⚠️ 必须去掉 live2d.js 给画布加的那个 drop-shadow filter：
+     在透明浮窗里，CSS filter 会开一块离屏缓冲，Android WebView 上会
+     把这块缓冲当白色背景贴出来（实测：她身上多一个白方块）。 */
+  #live2dCanvas { filter: none !important; }
+
+  #dot { z-index: 7; position: absolute; right: 6px; top: 6px; width: 8px; height: 8px; border-radius: 50%;
+    background: #4b6; box-shadow: 0 0 6px rgba(70, 200, 120, .8); }
+  #dot.off { background: #a33; box-shadow: 0 0 6px rgba(200, 60, 60, .8); }
+
+  /* 说话按钮（2026-10-20）：右下角一个小话筒，点一下开始录、再点一下发出去。
+     必须落在 Java 那边认定的"话筒区"（右下 72dp）里，否则点它会顺手把主界面拉起来。 */
+  #mic {
+    position: absolute; right: 6px; bottom: 8px; z-index: 8;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(12, 20, 34, .82); border: 1px solid rgba(120, 190, 255, .45);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .45);
+    transition: background .18s, border-color .18s, transform .12s;
+  }
+  #mic svg { width: 20px; height: 20px; fill: #cfe4ff; }
+  #mic:active { transform: scale(.94); }
+  #mic.rec { background: rgba(180, 40, 52, .92); border-color: rgba(255, 120, 130, .9);
+    animation: pulse 1.2s infinite; }
+  #mic.rec svg { fill: #fff; }
+
+  /* 打字按钮（在话筒左边）+ 输入行（浮窗里也能打字，2026-10-21） */
+  #kbBtn {
+    position: absolute; right: 50px; bottom: 8px; z-index: 8;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(12, 20, 34, .82); border: 1px solid rgba(120, 190, 255, .38);
+    display: flex; align-items: center; justify-content: center;
+    color: #cfe4ff; font-size: 16px; line-height: 1;
+  }
+  #kbBtn:active { background: rgba(30, 46, 72, .9); }
+  #inputRow {
+    position: absolute; left: 4px; right: 4px; bottom: 50px; z-index: 9;
+    display: none; align-items: center; gap: 4px;
+    background: rgba(9, 15, 26, .96); border: 1px solid rgba(120, 190, 255, .35);
+    border-radius: 12px; padding: 4px;
+  }
+  #inputRow.show { display: flex; }
+  #inputRow input {
+    flex: 1; min-width: 0; height: 30px; border: none; border-radius: 8px;
+    background: #0a1424; color: #eaf2ff; font-size: 12px; padding: 0 8px; outline: none;
+  }
+  #inputRow button {
+    flex: none; width: 30px; height: 30px; border-radius: 8px; border: none;
+    background: #2f8fff; color: #06121f; font-size: 14px; font-weight: 700;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(220, 60, 70, .55); }
+    70% { box-shadow: 0 0 0 10px rgba(220, 60, 70, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 60, 70, 0); }
+  }
+  #floatHandle { position:absolute; top:0; left:44px; right:44px; height:27px; color:rgba(205,226,241,.85); text-align:center; font-size:26px; line-height:12px; z-index:20; cursor:move; touch-action:none; }
+  #floatOpen,#floatClose { position:absolute; top:2px; z-index:20; border:1px solid rgba(160,190,213,.22); background:rgba(18,33,53,.68); color:#d5e5f1; border-radius:50%; width:24px; height:24px; padding:0; font-size:17px; }
+  #floatOpen { left:5px; } #floatClose { right:5px; }
+  #floatRetry { position:absolute;bottom:65px;left:10px;right:10px;z-index:22;padding:10px;border:1px solid #8dbcb9;border-radius:16px;background:#132e3c;color:#e8f1ec;font-size:12px; }
+  [hidden] {display:none!important;}
+</style>
+</head>
+<body class="float">
+  <div id="stage">
+    <div id="floatHandle" title="拖动浮窗">···</div>
+    <button id="floatOpen" title="打开她">↗</button>
+    <button id="floatClose" title="收起浮窗">×</button>
+    <canvas id="avatarCanvas"></canvas>
+    <button id="floatRetry" hidden>形象未连接 · 点我重试</button>
+    <div id="bubble"></div>
+    <div id="dot" class="off"></div>
+    <div id="kbBtn" title="打字">⌨</div>
+    <div id="inputRow">
+      <input id="msgInput" type="text" placeholder="打字跟她说…" autocomplete="off" enterkeyhint="send" />
+      <button id="sendBtn" title="发送">↑</button>
+    </div>
+    <div id="mic" title="跟她说话">
+      <svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg>
+    </div>
+  </div>
+  <!-- ⚠️ 别手写 vendor 的 script 标签：live2d.js 会按正确顺序
+       （pixi → live2dcubismcore → pixi-live2d-cubism4）自己加载，
+       手写顺序反了会报 "Could not find Cubism 4 runtime"。 -->
+  <script src="/startup.js?v=20261106-fast-open"></script>
+  <script src="/calendar.js?v=20261031-memory-history-voice"></script>
+  <script src="/chat-state.js?v=20261031-memory-history-voice"></script>
+  <script src="/assistant-intent.js?v=20261101-motion-search"></script>
+  <script src="/connection.js?v=20261102-remote-recovery"></script>
+  <script src="/action-policy.js?v=20261101-motion-search"></script>
+  <script src="/speech-text.js?v=20261031-continuity2"></script>
+  <script src="/speech-queue.js?v=20261031-continuity2"></script>
+  <script src="/audio-stream.js?v=20261031-continuity2"></script>
+  <script src="/character-state.js?v=20261101-motion-search"></script>
+  <script src="/character.js?v=20261101-motion-search"></script>
+  <script src="/performance.js?v=20261101-motion-search"></script>
+  <script src="/contact.js?v=20261031-memory-history-voice"></script>
+  <script src="/live2d.js?v=20261101-motion-search"></script>
+  <script src="/float.js?v=20261102-multi-route"></script>
+</body>
+</html>
+
