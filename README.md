@@ -49,7 +49,7 @@ account-roles.json中的10001/10002只是示例，主号和机器人必须分开
 
 ### 本地导入模型
 
-安装 Python 3.10+ 和 Pillow 后，可用 python scripts/import-model.py --source 你从作者取得的模型目录 --accept-model-license 导入，仅用于你自己的本机构建。工具不下载模型、不覆盖已有目录；保留作者许可并只对本地副本缩小纹理。交互参数依赖模型适配，原作者包没有本项目 interaction.json 时需按源码的模型参数自行适配。
+安装 Python 3.10+ 和 Pillow 后，可用 python scripts/import-model.py --source 你从作者取得的模型目录 --accept-model-license 导入，仅用于你自己的本机构建。工具不下载模型、不覆盖已有目录；保留作者许可并只对本地副本缩小纹理。导入工具会从你本地的原作者文件生成23种表情/8组动作与触摸适配，并保留作者许可；其他模型仍需另外适配。
 
 ### 发布检查记录
 
